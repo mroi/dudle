@@ -21,48 +21,31 @@
 require "ostruct"
 $conf = OpenStruct.new
 
-$conf.vcs = "git"
 
-case $cgi.server_port
-when 80
-	protocol = "http"
-	port = ""
-when 443
-	protocol = "https"
-	port = ""
-else
-	protocol = "http"
-	port = ":#{$cgi.server_port}"
-end
-$conf.siteurl = "#{protocol}://#{$cgi.server_name}#{port}#{$cgi.script_name.gsub(/[^\/]*$/,"")}"
-
-$conf.breadcrumbs = []
-$conf.header = []
 $conf.footer = []
-6.times{|i| 
-	$conf.header << "<div id='header#{i}'></div>"
-	$conf.footer << "<div id='footer#{i}'></div>"
+$conf.footer << <<FOOTER
+<p id="footer">Der <a target="_blank" href="https://github.com/mroi/owncloud-dudle">Quellcode dieser Anwendung ist verfügbar</a> unter der <a target="_blank" href="http://www.gnu.org/licenses/agpl-3.0.html">Lizenz AGPLv3</a>.</p>
+FOOTER
+
+$conf.indexnotice = <<INDEXNOTICE
+<h2>Aktuelle Umfragen</h2>
+<table>
+	<tr>
+		<th>Umfrage</th><th>Letzte Änderung</th>
+	</tr>
+INDEXNOTICE
+Dir.glob("*/data.yaml").sort_by{|f|
+	File.new(f).mtime
+}.reverse.collect{|f| f.gsub(/\/data\.yaml$/,'') }.each{|site|
+	$conf.indexnotice += <<INDEXNOTICE
+<tr class='participantrow'>
+	<td class='polls'><a href='./#{CGI.escapeHTML(site).gsub("'","%27")}/'>#{CGI.escapeHTML(site)}</a></td>
+	<td class='mtime'>#{File.new(site + "/data.yaml").mtime.strftime('%d.%m., %H:%M')}</td>
+</tr>
+INDEXNOTICE
 }
-
-$conf.errorlog = ""
-$conf.bugreportmail = "Benjamin.Kellermann@gmx.de"
-$conf.auto_send_report = false
-$conf.known_errors = []
-
-$conf.indexnotice = ""
-
-$conf.examples = []
-
-$conf.examplenotice = ""
-
-$conf.aboutnotice = ""
-
-$conf.default_css = "default.css"
-
+$conf.indexnotice += "</table>"
 
 if File.exists?("config.rb") || File.exists?("../config.rb")
 	require "config"
 end
-
-require "vcs_#{$conf.vcs}"
-
