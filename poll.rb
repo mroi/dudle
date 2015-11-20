@@ -1,3 +1,4 @@
+# encoding: utf-8
 ############################################################################
 # Copyright 2009,2010 Benjamin Kellermann                                  #
 #                                                                          #
@@ -23,7 +24,6 @@ require "time"
 require "pollhead"
 require "timepollhead"
 
-$KCODE = "u" if RUBY_VERSION < '1.9.0'
 class String
 	@@htmlidcache = {}
 	@@htmlidncache = {}

@@ -1,4 +1,4 @@
-# coding: utf-8
+# encoding: utf-8
 ############################################################################
 # Copyright 2009,2010 Benjamin Kellermann                                  #
 #                                                                          #
@@ -18,7 +18,6 @@
 # along with dudle.  If not, see <http://www.gnu.org/licenses/>.           #
 ############################################################################
 
-$KCODE = "u" if RUBY_VERSION < '1.9.0'
 require "yaml"
 require "cgi"
 
