@@ -24,6 +24,7 @@ require "cgi"
 
 $cgi = CGI.new unless $cgi
 
+$LOAD_PATH << '.'
 require 'gettext'
 require 'gettext/cgi'
 include GetText

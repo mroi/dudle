@@ -21,6 +21,8 @@
 
 
 if __FILE__ == $0
+
+$LOAD_PATH << '..'
 load "../dudle.rb"
 $d = Dudle.new
 
