@@ -21,11 +21,9 @@ DOMAIN=dudle
 
 locale: $(foreach p,$(wildcard locale/*/$(DOMAIN).po), $(addsuffix .mo,$(basename $p)))
 
-RGETTEXT=$(firstword $(shell which rgettext rxgettext))
-
 locale/$(DOMAIN).pot: *.rb *.cgi
 	rm -f $@
-	$(RGETTEXT) *.cgi *.rb -o $@
+	rgettext *.cgi *.rb -o $@
 
 %.mo: %.po
 	msgfmt $*.po -o $*.mo
