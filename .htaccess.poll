@@ -1,0 +1,4 @@
+<FilesMatch "^(|index\.cgi)$">
+        Satisfy any
+        Allow from all
+</FilesMatch>

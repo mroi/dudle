@@ -1,22 +1,19 @@
-<FilesMatch "^\.ht.*">
-	deny from all
-	satisfy all
-	ErrorDocument 403 "Access to these files is forbidden!"
-</FilesMatch>
-
-<FilesMatch "^data.yaml$">
-	deny from all
-	satisfy all
-	ErrorDocument 403 "Access to these files is forbidden!"
-</FilesMatch>
-
-RewriteEngine On
-RewriteRule \.git.* /data.yaml
-
-Options +ExecCGI
-AddHandler cgi-script .cgi
 DirectoryIndex index.cgi
+AddHandler cgi-script .cgi
 
-ErrorDocument 500 /error.cgi
-ErrorDocument 404 /not_found.cgi
-ErrorDocument 401 /authorization_required.cgi
+RewriteEngine on
+RewriteBase /
+
+
+# add trailing slash to subdirectory requests
+RewriteRule ^([^./]+)$ $1/ [R=permanent,L]
+
+
+<FilesMatch "^(.*\.css|favicon\.ico|[^./]+)$">
+	Satisfy any
+	Allow from all
+</FilesMatch>
+
+<Files data.yaml>
+	Deny from all
+</Files>

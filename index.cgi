@@ -50,6 +50,7 @@ if $cgi.include?("create_poll") && $cgi.include?("poll_url")
 			createnotice = _("A Poll with this address already exists.")
 		else Dir.mkdir(POLLURL)
 			Dir.chdir(POLLURL)
+			File.symlink("../.htaccess.poll",".htaccess")
 			File.symlink("../participate.rb","index.cgi")
 			["overview", "edit_columns", "delete_poll", "invite_participants"].each{|f|
 				File.symlink("../#{f}.rb","#{f}.cgi")
