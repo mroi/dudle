@@ -89,7 +89,7 @@ EDITDELETE
 		ret
 	end
 	
-	def edit_column_htmlform(activecolumn, revision)
+	def edit_column_htmlform(activecolumn)
 		if activecolumn != ""
 			title = activecolumn
 			description = @data[title]
@@ -114,7 +114,6 @@ EDITDELETE
 		</tr><tr>
 			<td></td>
 			<td>
-				<input type='hidden' name='undo_revision' value='#{revision}' />
 				#{hiddeninput}
 				<input type='submit' value='#{addeditstr}' />
 			</td>

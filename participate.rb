@@ -60,8 +60,6 @@ if edit
 
 else
 
-$d.html.add_atom("atom.cgi") if File.exists?("../atom.rb")
-
 # TABLE
 $d << <<HTML
 <div id='polltable'>

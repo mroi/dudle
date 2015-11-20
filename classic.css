@@ -117,11 +117,6 @@ table.calendarday td input{
 	padding: 1px;
 }
 
-div.undo{
-	text-align: center;
-	margin-top: 2em;
-}
-
 td.settingstable, table.settingstable td{
 	text-align: left;
 }
@@ -129,9 +124,6 @@ table.settingstable td.label{
 	text-align: right;
 }
 
-td.historycomment{
-	text-align: left;
-}
 td {
 	vertical-align:middle;
 	text-align:center;
@@ -202,10 +194,6 @@ html {
 	font-size:small;
 }
 
-#breadcrumbs {
-	display: none;
-}
-
 div#tabs {
 	min-width:65em;
 }
@@ -214,7 +202,7 @@ div#tabs ul{
 	margin-top: 2em;
 }
 
-div#tabs ul, p#history{
+div#tabs ul{
 	font-size: 80%;
 }
 
@@ -252,13 +240,6 @@ li.separator_tab {
 	margin-left: 2em;
 }
 
-pre#configwarning {
-	font-family: "Courier New",Courier,monospace;
-	letter-spacing:0;
-	margin-top: -12ex;
-	line-height:95%;
-	margin-left: -2ex;
-}
 .warning, .error{
 	color: red;
 }
@@ -270,13 +251,6 @@ h1 {
 div.comment { 
 	margin-top: 1ex; 
 	line-height: 1.4em;
-}
-
-form#ac_participant, form#ac {
-	background: #EEE;
-}
-form#ac_participant, form#ac, form#ac_admin{
-	padding: 1em;
 }
 
 #languageChooser {

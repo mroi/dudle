@@ -19,10 +19,8 @@
 # along with dudle.  If not, see <http://www.gnu.org/licenses/>.           #
 ############################################################################
 
-
 if __FILE__ == $0
 	require "pp"
-	puts "Content-type: text/plain\n"
 	puts
 
 problems = []
@@ -33,9 +31,7 @@ begin
 	hints << "You might want to config your environment within the file 'config.rb' (see 'config_sample.rb' for a starting point)" unless File.exists?("config.rb")
 
 begin
-	require "dudle"
-	#require "rubygems"
-	#require "atom" FIXME: rename atom.rb
+	require "./dudle"
 rescue LoadError => e
 	problems << ["Some Library is missing:", e.message]
 end
@@ -48,7 +44,7 @@ end
 
 begin
 	dir = "."
-	File.open("#{dir}koSai8ahye9shoTh","w")
+	File.open("#{dir}test.dummy","w")
 rescue Errno::EACCES => e
 	problems << ["Your webserver needs write access to #{dir}"]
 end
@@ -72,12 +68,6 @@ else
 		}.join("\n - ")
 	end
 end
-#4. You have to build a .mo file from the .po file in order to use the 
-   #localization. Type:
-      #make
-   #This requires libgettext-ruby-util, potool, and make to be installed.
-     #sudo aptitude install libgettext-ruby-util potool make
-
 
 end
 

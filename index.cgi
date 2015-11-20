@@ -22,7 +22,7 @@
 if __FILE__ == $0
 
 
-require "dudle"
+require "./dudle"
 
 $d = Dudle.new
 
@@ -50,16 +50,12 @@ if $cgi.include?("create_poll") && $cgi.include?("poll_url")
 			createnotice = _("A Poll with this address already exists.")
 		else Dir.mkdir(POLLURL)
 			Dir.chdir(POLLURL)
-			VCS.init
 			File.symlink("../participate.rb","index.cgi")
-			VCS.add("index.cgi")
-			["atom","customize", "history", "overview", "edit_columns","access_control", "delete_poll", "invite_participants"].each{|f|
+			["overview", "edit_columns", "delete_poll", "invite_participants"].each{|f|
 				File.symlink("../#{f}.rb","#{f}.cgi")
-				VCS.add("#{f}.cgi")
 			}
-			["data.yaml",".htaccess",".htdigest"].each{|f|
+			["data.yaml"].each{|f|
 				File.open(f,"w").close
-				VCS.add(f)
 			}
 			Poll.new(CGI.escapeHTML(POLLTITLE),$cgi["poll_type"])
 			Dir.chdir("..")

@@ -38,11 +38,7 @@ if $cgi.include?("confirmnumber")
 	if USERCONFIRM == QUESTIONS[CONFIRM]
 		Dir.chdir("..")
 
-		if $conf.examples.collect{|e| e[:url] }.include?($d.urlsuffix)
-			deleteconfirmstr =  _("Example polls can not be deleted.")
-			accidentstr = ""
-		else
-			FileUtils.cp_r($d.urlsuffix, "/tmp/#{$d.urlsuffix}.#{rand(9999999)}")
+		if true
 			FileUtils.rm_r($d.urlsuffix)
 
 			if $cgi.include?("return")

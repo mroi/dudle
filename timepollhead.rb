@@ -163,7 +163,7 @@ SORTSYMBOL
 		ret
 	end
 
-	def datenavi val,revision
+	def datenavi val
 		case val
 		when MONTHBACK
 			navimonth = Date.parse("#{@startdate.strftime('%Y-%m')}-1")-1
@@ -180,13 +180,12 @@ SORTSYMBOL
 					<input type='hidden' name='add_remove_column_month' value='#{navimonth.strftime("%Y-%m")}' />
 					<input type='hidden' name='firsttime' value='#{@firsttime.to_s.rjust(2,"0")}:00' />
 					<input type='hidden' name='lasttime' value='#{@lasttime.to_s.rjust(2,"0")}:00' />
-					<input type='hidden' name='undo_revision' value='#{revision}' />
 				</div>
 			</form>
 		</th>
 END
 	end
-	def timenavi val,revision
+	def timenavi val
 		case val
 		when EARLIER
 			return "" if @firsttime == 0
@@ -210,7 +209,6 @@ END
 				<input type='hidden' name='firsttime' value='#{firsttime.to_s.rjust(2,"0")}:00' />
 				<input type='hidden' name='lasttime' value='#{lasttime.to_s.rjust(2,"0")}:00' />
 				<input type='hidden' name='add_remove_column_month' value='#{@startdate.strftime("%Y-%m")}' />
-				<input type='hidden' name='undo_revision' value='#{revision}' />
 			</div>
 		</form>
 	</td>
@@ -219,7 +217,7 @@ END
 	end
 
 
-	def edit_column_htmlform(activecolumn, revision)
+	def edit_column_htmlform(activecolumn)
 		# calculate start date, first and last time to show
 		if $cgi.include?("add_remove_column_month")
 			@startdate = Date.parse("#{$cgi["add_remove_column_month"]}-1")
@@ -243,7 +241,7 @@ END
 		@firsttime = realtimes.min.strftime("%H").to_i
 		@lasttime  = realtimes.max.strftime("%H").to_i
 
-		def add_remove_button(klasse, buttonlabel, action, columnstring, revision, pretext = "")
+		def add_remove_button(klasse, buttonlabel, action, columnstring, pretext = "")
 			titlestr = _("Add column")
 			titlestr = _("Delete column") if klasse == "chosen" || klasse == "delete"
 			return <<FORM
@@ -254,7 +252,6 @@ END
 		<input type='hidden' name='firsttime' value="#{@firsttime.to_s.rjust(2,"0")}:00" />
 		<input type='hidden' name='lasttime' value="#{@lasttime.to_s.rjust(2,"0")}:00" />
 		<input type='hidden' name='add_remove_column_month' value="#{@startdate.strftime("%Y-%m")}" />
-		<input type='hidden' name='undo_revision' value='#{revision}' />
 	</div>
 </form>
 FORM
@@ -269,9 +266,9 @@ FORM
 </div>
 <table border='1' class='calendarday'><tr>
 END
-		ret += datenavi(MONTHBACK,revision)
+		ret += datenavi(MONTHBACK)
 		ret += "<th colspan='3'>#{@startdate.strftime('%b %Y')}</th>"
-		ret += datenavi(MONTHFORWARD,revision)
+		ret += datenavi(MONTHFORWARD)
 
 		ret += "</tr><tr>\n"
 
@@ -293,7 +290,7 @@ END
 				klasse = "chosen"
 				varname = "deletecolumn"
 			end
-			ret += "<td class='calendarday'>#{add_remove_button(klasse, d.day, varname, d.strftime('%Y-%m-%d'),revision)}</td>"
+			ret += "<td class='calendarday'>#{add_remove_button(klasse, d.day, varname, d.strftime('%Y-%m-%d'))}</td>"
 			d = d.next
 			break if d.month != @startdate.month
 			ret += "</tr><tr>\n" if d.wday == 1
@@ -330,7 +327,7 @@ END
 
 		head_count("%Y-%m-%d",true).each{|title,count|
 			coltime = Date.parse(title)
-			ret += "<th>" + add_remove_button("delete",DELETE, "deletecolumn", coltime.strftime("%Y-%m-%d"), revision, "#{coltime.strftime('%a, %d')}&nbsp;") + "</th>"
+			ret += "<th>" + add_remove_button("delete",DELETE, "deletecolumn", coltime.strftime("%Y-%m-%d"), "#{coltime.strftime('%a, %d')}&nbsp;") + "</th>"
 		}
 
 		ret += "</tr>"
@@ -345,7 +342,7 @@ END
 		}
 
 
-		ret += timenavi(EARLIER,revision)
+		ret += timenavi(EARLIER)
 
 		(@firsttime..@lasttime).each{|i| times << "#{i.to_s.rjust(2,"0")}:00" }
 		times.flatten.compact.uniq.sort{|a,b|
@@ -366,7 +363,6 @@ END
 						<input type='hidden' name='add_remove_column_month' value='#{@startdate.strftime("%Y-%m")}' />
 						<input type='hidden' name='firsttime' value='#{@firsttime.to_s.rjust(2,"0")}:00' />
 						<input type='hidden' name='lasttime' value='#{@lasttime.to_s.rjust(2,"0")}:00' />
-						<input type='hidden' name='undo_revision' value='#{revision}' />
 END
 			# check, if some date of the row is unchecked
 			if head_count("%Y-%m-%d",false).collect{|day,num|
@@ -402,12 +398,12 @@ END
 						hiddenvars += "<input type='hidden' name='columnid' value=\"#{TimeString.new(day,nil)}\" />"
 					end
 				end
-				ret += "<td>" + add_remove_button(klasse, chosenstr[klasse], "columntime", CGI.escapeHTML(timestamp.time_to_s.to_s), revision, hiddenvars) + "</td>"
+				ret += "<td>" + add_remove_button(klasse, chosenstr[klasse], "columntime", CGI.escapeHTML(timestamp.time_to_s.to_s), hiddenvars) + "</td>"
 
 			}
 			ret += "</tr>\n"
 		}
-		ret += timenavi(LATER,revision)
+		ret += timenavi(LATER)
 
 		ret += "<tr><td colspan='2' class='invisible'></td>"
 		days.each{|d|
@@ -419,7 +415,6 @@ END
 				<input type='hidden' name='add_remove_column_month' value='#{d.strftime("%Y-%m")}' />
 				<input type='hidden' name='firsttime' value='#{@firsttime.to_s.rjust(2,"0")}:00' />
 				<input type='hidden' name='lasttime' value='#{@lasttime.to_s.rjust(2,"0")}:00' />
-				<input type='hidden' name='undo_revision' value='#{revision}' />
 END
 			if @data.include?(TimeString.new(d,nil))
 				ret += "<input type='hidden' name='columnid' value='#{TimeString.new(d,nil).to_s}' />"

@@ -48,7 +48,7 @@ require "config_defaults"
 require "charset"
 
 class Dudle
-	attr_reader :html, :table, :urlsuffix, :css, :user_css, :title, :tab
+	attr_reader :html, :table, :urlsuffix, :title, :tab
 	def is_poll?
 		$is_poll
 	end
@@ -74,58 +74,31 @@ class Dudle
 		if is_poll?
 			@tabs << ["",""]
 			@tabs << [_("Poll"),"."]
-			@tabs << [_("History"),"history.cgi"]
 			@tabs << ["",""]
 			@configtabs = [
 				[_("Edit Columns"),"edit_columns.cgi"],
 				[_("Invite Participants"),"invite_participants.cgi"],
-				[_("Access Control"),"access_control.cgi"],
 				[_("Overview"),"overview.cgi"]
 			]
 			@tabs += @configtabs
 			@tabs << [_("Delete Poll"),"delete_poll.cgi"]
 			@tabs << ["",""]
-		else
-			@tabs << [_("Examples"),"example.cgi"]
-			@tabs << [_("About"),"about.cgi"]
 		end
-		@tabs << [_("Customize"),"customize.cgi"]
 		@tabtitle = @tabs.collect{|title,file| title if file == @tab}.compact[0]
 	end
-	def revision
-		@requested_revision || VCS.revno
-	end
-	def breadcrumbs
-		crumbs = $conf.breadcrumbs
-		crumbs << "<a href='#{@basedir}'>" + _("Dudle Home") + "</a>"
-		if is_poll?
-			if @tab == "."
-				crumbs << @title
-			else
-				crumbs << "<a href='.'>#{@title}</a>"
-				crumbs << @tabtitle
-			end
-		else
-			if @tab != "."
-				crumbs << @tabtitle
-			end
-		end
-		"<div id='breadcrumbs'><ul><li class='breadcrumb'>#{crumbs.join("</li><li class='breadcrumb'>")}</li></ul></div>"
-	end
 
-	def initialize(params = {:revision => nil, :title => nil, :hide_lang_chooser => nil, :relative_dir => ""})
-		@requested_revision = params[:revision]
+	def initialize(params = {:title => nil, :hide_lang_chooser => nil, :relative_dir => ""})
 		@hide_lang_chooser = params[:hide_lang_chooser]
 		@cgi = $cgi
 		@tab = File.basename($0)
 		@tab = "." if @tab == "index.cgi"
 
 		if is_poll?
-			# log last read acces manually (no need to grep server logfiles)
-			File.open("last_read_access","w").close
 			@basedir = ".." 
 			inittabs
-			@table = YAML::load(VCS.cat(self.revision, "data.yaml"))
+			datafile = File.open("data.yaml", File::RDWR)
+			datafile.flock(File::LOCK_EX)
+			@table = YAML::load(datafile.read)
 			@urlsuffix = File.basename(File.expand_path("."))
 			@title = @table.name
 			
@@ -146,56 +119,17 @@ class Dudle
 
 		
 		@css = ["default", "classic", "print"].collect{|f| f + ".css"}
-		Dir.open("#{@basedir}/css/").each{|f|
-			if f =~ /\.css$/ 
-				@css << "css/#{f}"
-			end
-		}
-		if $cgi.include?("css")
-			@user_css = $cgi["css"] 
-			@html.add_cookie("css",@user_css,"/",Time.now + (1*60*60*24*365 * (@user_css == $conf.default_css ? -1 : 1 )))
-		else
-			@user_css = $cgi.cookies["css"][0]
-			@user_css ||= $conf.default_css
-		end
-
-		if $cgi.user_agent =~ /.*MSIE [567]\..*/
-			css = [@user_css]
-		else
-			css = @css
-		end
-		css.each{|href|
-			@html.add_css("#{@basedir}/#{href}",href.scan(/([^\/]*)\.css/).flatten[0] ,href == @user_css)
+		@css.each{|href|
+			@html.add_css("#{@basedir}/#{href}",href.scan(/([^\/]*)\.css/).flatten[0], href == "default.css")
 		}
 
 		@html << <<HEAD
 <body><div id="top"></div>
-HEAD
-		$conf.header.each{|h| @html << h }
-
-		@html << <<HEAD
-#{breadcrumbs}
 <div id='main'>
 #{tabs_to_html(@tab)}
 <div id='content'>
 	<h1 id='polltitle'>#{@title}</h1>
 HEAD
-
-
-		###################
-		# init extenisons #
-		###################
-		@extensions = []
-		$d = self # FIXME: this is dirty, but extensions need to know table elem 
-		Dir.open("#{@basedir}/extensions/").sort.each{|f|
-			if File.exists?("#{@basedir}/extensions/#{f}/main.rb")
-				@extensions << f 
-				if File.exists?("#{@basedir}/extensions/#{f}/preload.rb")
-					$current_ext_dir = f
-					require "#{@basedir}/extensions/#{f}/preload"
-				end
-			end
-		}
 	end
 
 	def wizzard_nav
@@ -207,7 +141,6 @@ HEAD
 				<td>
 					<form method='post' action=''>
 						<div>
-							<input type='hidden' name='undo_revision' value='#{self.revision}' />
 							<input type='submit' #{disabled ? "disabled='disabled'" : ""} name='#{button}' value='#{button}' />
 						</div>
 					</form>
@@ -264,12 +197,6 @@ READY
 
 		@html << "</div>" # main
 		$conf.footer.each{|f| @html << f }
-		@extensions.each{|e|
-			if File.exists?("#{@basedir}/extensions/#{e}/main.rb")
-				$current_ext_dir = e
-				require "#{@basedir}/extensions/#{e}/main"
-			end
-		}
 
 		@html << "</body>"
 		@html.out(@cgi)

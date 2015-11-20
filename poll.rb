@@ -265,7 +265,6 @@ END
 		if @data.include?(edituser)
 			@head.columns.each{|k| checked[k] = @data[edituser][k]}
 		else
-			edituser = $cgi.cookies["username"][0] unless @data.include?($cgi.cookies["username"][0])
 			@head.columns.each{|k| checked[k] = NOVAL}
 		end
 
@@ -352,7 +351,7 @@ TR
 			ret += <<ADDCOMMENT
 <form method='post' action='.' accept-charset='utf-8' id='newcomment'>
 	<div class='comment' id='add_comment'>
-		<input value='#{$cgi.cookies["username"][0] || "Anonymous"}' type='text' name='commentname' size='9' /> #{saysstr}&nbsp;
+		<input value='Anonymous' type='text' name='commentname' size='9' /> #{saysstr}&nbsp;
 		<br />
 		<textarea cols='50' rows='7' name='comment' ></textarea>
 		<br /><input type='submit' value='#{submitstr}' />
@@ -363,51 +362,6 @@ ADDCOMMENT
 
 		ret += "</div>\n"
 		ret
-	end
-
-	def history_selectform(revision, selected)
-		showhiststr = _("Show history items:")
-		ret = <<FORM
-<form method='get' action=''>
-	<div>
-		#{showhiststr} 
-		<select name='history'>
-FORM
-		[["",_("All")],
-		 ["participants",_("Participant related")],
-		 ["columns",_("Column related")],
-		 ["comments",_("Comment related")],
-		 ["ac",_("Access Control related")]
-			].each{|value,opt|
-			ret += "<option value='#{value}' #{selected == value ? "selected='selected'" : ""} >#{opt}</option>"
-		}
-		ret += "</select>"
-		ret += "<input type='hidden' name='revision' value='#{revision}' />" if revision
-		updatestr = _("Update")
-		ret += <<FORM
-		<input type='submit' value='#{updatestr}' />
-	</div>
-</form>
-FORM
-		ret
-	end
-
-	def history_to_html(middlerevision,only)
-		log = VCS.history
-		if only != ""
-			case only
-			when "comments"
-				match = /^Comment .*$/
-			when "participants"
-				match = /^Participant .*$/
-			when "columns"
-				match = /^Column .*$/
-			when "ac"
-				match = /^Access Control .*$/
-			end
-			log = log.comment_matches(match)
-		end
-		log.around_rev(middlerevision,11).to_html(middlerevision,only)
 	end
 
 	def add_participant(olduser, name, agreed)
@@ -443,9 +397,10 @@ FORM
 		File.open("data.yaml", 'w') do |out|
 			out << "# This is a dudle poll file\n"
 			out << self.to_yaml
+			out.flush
 			out.chmod(0660)
+			out.flock(File::LOCK_UN)
 		end
-		VCS.commit(CGI.escapeHTML(comment))
 	end
 
 	###############################
@@ -481,8 +436,8 @@ FORM
 		store "Column #{parsedtitle} #{oldcolumn == "" ? "added" : "edited"}" if parsedtitle
 	end
 
-	def edit_column_htmlform(activecolumn, revision)
-		@head.edit_column_htmlform(activecolumn, revision)
+	def edit_column_htmlform(activecolumn)
+		@head.edit_column_htmlform(activecolumn)
 	end
 end
 

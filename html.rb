@@ -32,7 +32,6 @@ class HTML
 		@body = ""
 		@htmlheader = ''
 		@css = []
-		@atom = []
 	end
 	def head
 		ret = <<HEAD
@@ -50,10 +49,6 @@ HEAD
 			ret += "<link rel='stylesheet' type='text/css' href='#{@relative_dir}#{href}' media='print' />\n" if title == "print"
 		}
 
-		@atom.each{|href|
-			ret += "<link rel='alternate'  type='application/atom+xml' href='#{@relative_dir}#{href}' />\n"
-		}
-
 		ret += @htmlheader
 
 		ret += "</head>"
@@ -65,9 +60,6 @@ HEAD
 		else
 			@css << [title,href]
 		end
-	end
-	def add_atom(href)
-		@atom << href
 	end
 	def add_cookie(key,value,path,expiretime)
 		c = CGI::Cookie.new(key, value)
