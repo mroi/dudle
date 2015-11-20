@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<info>
+	<id>dudle</id>
+	<name>Dudle Polls</name>
+	<licence>AGPL</licence>
+	<author>Dudle team, adapted by Michael Roitzsch</author>
+	<description>This app integrates Dudle polls into ownCloud. It provides polls on dates and topics.</description>
+	<version>0.1</version>
+</info>
