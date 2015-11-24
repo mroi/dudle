@@ -114,7 +114,7 @@ td.polls {
 	text-align:left;
 }
 
-div#add_comment,div#edit_column, div#backlink, input.delete_comment_button, tr#add_participant, div#configlink, div#tabs, span.edituser, span.sortsymb, div#languageChooser, input[type=submit], a.comment_sort, a.top_bottom_ref {
+div#add_comment,div#edit_column, div#backlink, input.delete_comment_button, tr#add_participant, div#configlink, div#tabs, span.edituser, span.sortsymb, input[type=submit], a.comment_sort, a.top_bottom_ref {
 	display: none;
 }
 

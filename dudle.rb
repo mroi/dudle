@@ -87,8 +87,7 @@ class Dudle
 		@tabtitle = @tabs.collect{|title,file| title if file == @tab}.compact[0]
 	end
 
-	def initialize(params = {:title => nil, :hide_lang_chooser => nil, :relative_dir => ""})
-		@hide_lang_chooser = params[:hide_lang_chooser]
+	def initialize(params = {:title => nil, :relative_dir => ""})
 		@cgi = $cgi
 		@tab = File.basename($0)
 		@tab = "." if @tab == "index.cgi"
@@ -170,31 +169,6 @@ READY
 
 		@html.add_cookie("lang",@cgi["lang"],"/",Time.now + (1*60*60*24*365)) if @cgi.include?("lang")
 		@html << "</div>" # content
-		@html << "<div id='languageChooser'><ul>"
-		lang = [
-			["en", "English"],
-			["es", "Español"],
-			["fr", "Français"],
-			["de", "Deutsch"],
-			["it", "Italiano"],
-			["nl", "Nederlands"],
-			["hu", "Magyar"],
-			["cs", "Česky"],
-			["ca", "Català"],
-			["sv", "Svenska"],
-			["gl", "Galego"]
-			]
-		unless @hide_lang_chooser
-			lang.each{|short,long|
-				if short == GetText.locale.language
-					@html << "<li class='lang'>#{long}</li>"
-				else
-					@html << "<li class='lang'><a href='?lang=#{short}'>#{long}</a></li>"
-				end
-			}
-		end
-		@html << "</ul></div>" # languageChooser
-
 		@html << "</div>" # main
 		$conf.footer.each{|f| @html << f }
 

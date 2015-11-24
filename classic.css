@@ -252,13 +252,3 @@ div.comment {
 	margin-top: 1ex; 
 	line-height: 1.4em;
 }
-
-#languageChooser {
-	margin-top: 1em;
-	text-align: center;
-}
-
-div#languageChooser li {
-	list-style:none;
-	display: inline;
-}
