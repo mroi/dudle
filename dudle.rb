@@ -93,15 +93,15 @@ class Dudle
 		@tab = "." if @tab == "index.cgi"
 
 		if is_poll?
-			@basedir = ".." 
+			@basedir = ".."
 			inittabs
 			datafile = File.open("data.yaml", File::RDWR)
 			datafile.flock(File::LOCK_EX)
 			@table = YAML::load(datafile.read)
 			@urlsuffix = File.basename(File.expand_path("."))
 			@title = @table.name
-			
-			
+
+
 			configfiles = @configtabs.collect{|name,file| file}
 			@is_config = configfiles.include?(@tab)
 			@wizzardindex = configfiles.index(@tab) if @is_config
@@ -116,7 +116,7 @@ class Dudle
 		end
 
 
-		
+
 		@css = ["default", "classic", "print"].collect{|f| f + ".css"}
 		@css.each{|href|
 			@html.add_css("#{@basedir}/#{href}",href.scan(/([^\/]*)\.css/).flatten[0], href == "default.css")

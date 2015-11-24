@@ -47,7 +47,7 @@ class PollHead
 		if parsedtitle != ""
 			@data[parsedtitle] = CGI.escapeHTML(cgi["columndescription"].strip)
 			return parsedtitle
-		else 
+		else
 			return false
 		end
 	end
@@ -88,7 +88,7 @@ EDITDELETE
 		ret += "</tr>\n"
 		ret
 	end
-	
+
 	def edit_column_htmlform(activecolumn)
 		if activecolumn != ""
 			title = activecolumn
