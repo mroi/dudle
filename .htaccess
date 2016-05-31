@@ -9,7 +9,7 @@ RewriteBase /
 RewriteRule ^([^./]+)$ $1/ [R=permanent,L]
 
 
-<FilesMatch "^(.*\.css|app\.svg|favicon\.ico|[^./]+)$">
+<FilesMatch "^(.*\.css|.*\.woff|app\.svg|favicon\.ico|[^./]+)$">
 	Satisfy any
 	Allow from all
 </FilesMatch>
