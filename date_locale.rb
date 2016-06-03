@@ -1,7 +1,9 @@
-# encoding: utf-8
+# coding: utf-8
 #Make a 'localization' for Date, DateTime and Time.
 #
 #This is not using locale, but if you use locale, it is detected and locale sensitive.
+#
+#The output is in iso-8859-1, other encodings can be set with Date_locale.set_target_encoding.
 #
 
 
@@ -27,7 +29,7 @@ module Date_locale
       :monthnames => [nil] + %w{gener febrer març abril maig juny juliol agost setembre octubre novembre desembre},
       :abbr_monthnames => [nil] + %w{gen feb mar abr mai jun jul ago set oct nov des},
       :daynames => %w{diumenge dilluns dimarts dimecres dijous divendres dissabte},
-      :abbr_daynames => %w{dmg dll dmt dmc djs dvn dsb},
+      :abbr_daynames => %w{dg dl dt dc dj dv ds},
      },
    :cf => {
       :monthnames => [nil] + %w{Janvier Février Mars Avril Mai Juin Juillet Août Septembre Octobre Novembre Décembre},
@@ -84,10 +86,10 @@ module Date_locale
       :abbr_daynames => %w{su ma ti ke to pe la},
      },
    :fr => {
-      :monthnames => [nil] + %w{Janvier Février Mars Avril Mai Juin Juillet Août Septembre Octobre Novembre Decembre},
-      :abbr_monthnames => [nil] + %w{Jan Fév Mar Avr Mai Jui Jul Aoû Sep Oct Nov Déc},
-      :daynames => %w{Dimanche Lundi Mardi Mercredi Jeudi Vendredi Samedi},
-      :abbr_daynames => %w{Dim Lun Mar Mer Jeu Ven Sam},
+      :monthnames => [nil] + %w{janvier février mars avril mai juin juillet août septembre octobre novembre decembre},
+      :abbr_monthnames => [nil] + %w{jan fév mar avr mai jun jul aoû sep oct nov déc},
+      :daynames => %w{dimanche lundi mardi mercredi jeudi vendredi samedi},
+      :abbr_daynames => %w{dim lun mar mer jeu ven sam},
      },
    :it => {
       :monthnames => [nil] + %w{Gennaio Febbraio Marzo Aprile Maggio Giugno Luglio Agosto Settembre Ottobre Novembre Dicembre },
@@ -162,6 +164,7 @@ module Date_locale
     return DATE_TEXTS[lang]
   end
 
+
   #
   #Get the key for the wanted language.
   #
@@ -173,6 +176,9 @@ module Date_locale
     #
     #if defined?( Locale ) and lang.is_a?(Locale::TagList)
     if lang.respond_to?(:language)
+    	if lang.respond_to?(:charset) && lang.charset != nil
+				Date_locale.set_target_encoding( lang.charset )
+			end
       return lang.language.to_sym
     end
 
@@ -224,7 +230,7 @@ module Date_locale
             end
           }
         )
-    result
+    result.encode("utf-8")
   end #strftime_locale(format = '%F', lang = :en )
 
 end #module Date_locale

@@ -1,4 +1,4 @@
-# encoding: utf-8
+# coding: utf-8
 ############################################################################
 # Copyright 2009,2010 Benjamin Kellermann                                  #
 #                                                                          #
@@ -40,12 +40,12 @@ else
 end
 
 $:.push("..")
-require "date_locale"
+require_relative "date_locale"
 
-require "html"
-require "poll"
-require "config_defaults"
-require "charset"
+require_relative "html"
+require_relative "poll"
+require_relative "config_defaults"
+require_relative "charset"
 
 class Dudle
 	attr_reader :html, :table, :urlsuffix, :title, :tab
@@ -116,10 +116,9 @@ class Dudle
 		end
 
 
-
 		@css = ["default", "fonts/fonts", "owncloud", "print"].collect{|f| f + ".css"}
 		@css.each{|href|
-			@html.add_css("#{@basedir}/#{href}",href.scan(/([^\/]*)\.css/).flatten[0], href == "default.css")
+			@html.add_css("#{@basedir}/#{href}",href.scan(/([^\/]*)\.css/).flatten[0] ,href == "default.css")
 		}
 
 		@html << <<HEAD

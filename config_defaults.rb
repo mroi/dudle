@@ -1,4 +1,4 @@
-# encoding: utf-8
+# coding: utf-8
 ############################################################################
 # Copyright 2009,2010 Benjamin Kellermann                                  #
 #                                                                          #
@@ -20,7 +20,6 @@
 
 require "ostruct"
 $conf = OpenStruct.new
-
 
 $conf.footer = []
 $conf.footer << <<FOOTER
@@ -47,5 +46,5 @@ INDEXNOTICE
 $conf.indexnotice += "</table>"
 
 if File.exists?("config.rb") || File.exists?("../config.rb")
-	require "config"
+	require_relative "config"
 end

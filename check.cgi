@@ -31,7 +31,7 @@ begin
 	hints << "You might want to config your environment within the file 'config.rb' (see 'config_sample.rb' for a starting point)" unless File.exists?("config.rb")
 
 begin
-	require "./dudle"
+	require_relative "dudle"
 rescue LoadError => e
 	problems << ["Some Library is missing:", e.message]
 end
@@ -39,14 +39,11 @@ end
 
 
 unless File.exists?("locale/de/dudle.mo")
-	problems << ["Localization will not work. You need to build the .mo files. Refer the README for details."]
+	problems << ["If you want a language other than English, you will need a localization and therefore need ot build the .mo files. Refer the README for details."]
 end
 
-begin
-	dir = "."
-	File.open("#{dir}test.dummy","w")
-rescue Errno::EACCES => e
-	problems << ["Your webserver needs write access to #{dir}"]
+unless File.writable?(".")
+	problems << ["Your webserver needs write access to #{File.expand_path(".")}"]
 end
 
 rescue Exception => e

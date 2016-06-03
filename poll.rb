@@ -1,4 +1,4 @@
-# encoding: utf-8
+# coding: utf-8
 ############################################################################
 # Copyright 2009,2010 Benjamin Kellermann                                  #
 #                                                                          #
@@ -18,11 +18,11 @@
 # along with dudle.  If not, see <http://www.gnu.org/licenses/>.           #
 ############################################################################
 
-require "hash"
+require_relative "hash"
 require "yaml"
 require "time"
-require "pollhead"
-require "timepollhead"
+require_relative "pollhead"
+require_relative "timepollhead"
 
 class String
 	@@htmlidcache = {}
@@ -90,18 +90,18 @@ class Poll
 			ret += "<td><span class='edituser'>"
 			ret += "<a title=\""
 			ret += _("Edit user %{user}...") % {:user => CGI.escapeHTML(participant)}
-			ret += "\" href=\"?edituser=#{CGI.escapeHTML(CGI.escape(participant))}\">"
+			ret += "\" href=\"?edituser=#{CGI.escape(participant)}\">"
 			ret += EDIT
 			ret += "</a> | <a title=\""
 			ret += _("Delete user %{user}...") % {:user => CGI.escapeHTML(participant)}
-			ret += "\" href=\"?deleteuser&amp;edituser=#{CGI.escapeHTML(CGI.escape(participant))}\">"
+			ret += "\" href=\"?deleteuser&amp;edituser=#{CGI.escape(participant)}\">"
 			ret += "#{DELETE}</a>"
 			ret += "</span></td>"
 			ret += "<td class='name'>"
 		else
 			ret += "<td class='name' colspan='2'>"
 		end
-		ret += "<span id=\"#{participant.to_htmlID}\">#{participant}</span>"
+		ret += "<span id=\"#{participant.to_htmlID}\">#{CGI.escapeHTML(participant)}</span>"
 		ret += "</td>"
 		ret
 	end
@@ -371,24 +371,22 @@ ADDCOMMENT
 			maximum ||= 0
 			name = "Anonymous ##{maximum + 1}"
 		end
-		htmlname = CGI.escapeHTML(name)
 		action = ''
-		if @data.delete(CGI.escapeHTML(olduser))
+		if @data.delete(olduser)
 			action = "edited"
 		else
 			action = "added"
 		end
-		@data[htmlname] = {"timestamp" => Time.now }
+		@data[name] = {"timestamp" => Time.now }
 		@head.columns.each{|column|
-			@data[htmlname][column] = agreed[column.to_s]
+			@data[name][column] = agreed[column.to_s]
 		}
 		store "Participant #{name.strip} #{action}"
 	end
 
 	def delete(name)
-		htmlname = CGI.escapeHTML(name.strip)
-		if @data.has_key?(htmlname)
-			@data.delete(htmlname)
+		if @data.has_key?(name)
+			@data.delete(name)
 			store "Participant #{name.strip} deleted"
 		end
 	end
