@@ -116,7 +116,7 @@ class Dudle
 		end
 
 
-		@css = ["default", "fonts/fonts", "owncloud", "print"].collect{|f| f + ".css"}
+		@css = ["default", "fonts/fonts", "nextcloud", "print"].collect{|f| f + ".css"}
 		@css.each{|href|
 			@html.add_css("#{@basedir}/#{href}",href.scan(/([^\/]*)\.css/).flatten[0] ,href == "default.css")
 		}

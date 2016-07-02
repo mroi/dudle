@@ -23,7 +23,7 @@ $conf = OpenStruct.new
 
 $conf.footer = []
 $conf.footer << <<FOOTER
-<p id="footer">Der <a target="_blank" href="https://github.com/mroi/owncloud-dudle">Quellcode dieser Anwendung ist verfügbar</a> unter der <a target="_blank" href="http://www.gnu.org/licenses/agpl-3.0.html">Lizenz AGPLv3</a>.</p>
+<p id="footer">Der <a target="_blank" href="https://github.com/mroi/nextcloud-dudle">Quellcode dieser Anwendung ist verfügbar</a> unter der <a target="_blank" href="http://www.gnu.org/licenses/agpl-3.0.html">Lizenz AGPLv3</a>.</p>
 FOOTER
 
 $conf.indexnotice = <<INDEXNOTICE
