@@ -50,20 +50,30 @@ if $cgi.include?("create_poll") && $cgi.include?("poll_url")
 			createnotice = _("A Poll with this address already exists.")
 		else Dir.mkdir(POLLURL)
 			Dir.chdir(POLLURL)
-			File.symlink("../.htaccess.poll",".htaccess")
-			File.symlink("../participate.rb","index.cgi")
-			["overview", "edit_columns", "delete_poll", "invite_participants"].each{|f|
-				File.symlink("../#{f}.rb","#{f}.cgi")
-			}
-			["data.yaml"].each{|f|
-				File.open(f,"w").close
-			}
-			Poll.new(CGI.escapeHTML(POLLTITLE),$cgi["poll_type"])
-			Dir.chdir("..")
-			$d.html.header["status"] = "REDIRECT"
-			$d.html.header["Cache-Control"] = "no-cache"
-			$d.html.header["Location"] = $conf.siteurl + POLLURL + "/edit_columns.cgi"
-			$d << _("The poll was created successfully. The link to your new poll is: %{link}") % {:link => "<br /><a href=\"#{POLLURL}\">#{POLLURL}</a>"}
+			begin
+				File.symlink("../.htaccess.poll",".htaccess")
+				File.symlink("../participate.rb","index.cgi")
+				["overview", "edit_columns", "delete_poll", "invite_participants"].each{|f|
+					File.symlink("../#{f}.rb","#{f}.cgi")
+				}
+				["data.yaml"].each{|f|
+					File.open(f,"w").close
+				}
+				Poll.new(CGI.escapeHTML(POLLTITLE),$cgi["poll_type"])
+				Dir.chdir("..")
+				$d.html.header["status"] = "REDIRECT"
+				$d.html.header["Cache-Control"] = "no-cache"
+				$d.html.header["Location"] = $conf.siteurl + POLLURL + "/edit_columns.cgi"
+				$d << _("The poll was created successfully. The link to your new poll is: %{link}") % {:link => "<br /><a href=\"#{POLLURL}\">#{POLLURL}</a>"}
+			rescue WrongPollTypeError # should only happen in case of hacking
+				Dir.chdir("..")
+				require "fileutils"
+				FileUtils.rm_r(POLLURL)
+				$d.html.header["status"] = "REDIRECT"
+				$d.html.header["Cache-Control"] = "no-cache"
+				$d.html.header["Location"] = "http://localhost/"
+				$d << _("Go away.")
+			end
 		end
 	end
 end
