@@ -12,7 +12,7 @@ $name = array_key_exists($language, $name_l10n) ? $name_l10n[$language] : $name_
 
 OCP\App::addNavigationEntry(array(
 	'id' => 'dudle',
-	'order' => 5,
+	'order' => 6,
 	'href' => OCP\Util::linkToRoute('dudle_index'),
 	'icon' => OCP\Util::linkTo('dudle', 'appinfo/app.svg'),
 	'name' => $name
