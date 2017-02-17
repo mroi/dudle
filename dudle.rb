@@ -156,7 +156,7 @@ READY
 				@html.header["status"] = "REDIRECT"
 				@html.header["Cache-Control"] = "no-cache"
 				@html.header["Location"] = @configtabs[linkindex][1]
-				@html << _("All changes were saved sucessfully.") + " <a href=\"#{@configtabs[linkindex][1]}\">" + _("Proceed!") + "</a>"
+				@html << _("All changes were saved successfully.") + " <a href=\"#{@configtabs[linkindex][1]}\">" + _("Proceed!") + "</a>"
 				out
 				exit
 			end
