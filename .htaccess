@@ -2,11 +2,13 @@ Options +ExecCGI
 AddHandler cgi-script .cgi
 DirectoryIndex index.cgi
 
-RewriteEngine on
-RewriteBase /
+<IfModule mod_rewrite.c>
+	RewriteEngine on
+	RewriteBase /
 
-# add trailing slash to subdirectory requests
-RewriteRule ^([^./]+)$ $1/ [R=permanent,L]
+	# add trailing slash to subdirectory requests
+	RewriteRule ^([^./]+)$ $1/ [R=permanent,L]
+</IfModule>
 
 <FilesMatch "^(.*\.css|.*\.woff|app\.svg|favicon\.ico|[^./]+)$">
 	Satisfy any
