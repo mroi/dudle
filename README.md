@@ -8,8 +8,9 @@ required dependencies and simplify running it on shared hosting platforms. Many 
 such as version control and customization are gone.
 
 You install the Dudle app within Nextcloud by cloning this repository into a new directory 
-`apps/dudle` within your Nextcloud installation. You can then enable the Dudle app in the 
-Nextcloud app selection dialog.
+`apps/dudle` within your Nextcloud installation. Make sure to rename the folder resulting 
+from the clone from `nextcloud-dudle` to just `dudle`. You can then enable the Dudle app in 
+the Nextcloud app selection dialog.
 
 Note that currently, access control is not available. Everyone accessing the Nextcloud app 
 has full permissions to create and delete polls.
