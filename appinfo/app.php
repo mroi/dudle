@@ -7,13 +7,16 @@ $name_l10n = array(
 	'en_US' => 'Polls'
 );
 
-$language = OCP\Util::getL10N('dudle')->getLanguageCode();
+$language = \OC::$server->getL10N(null)->getLanguageCode();
 $name = array_key_exists($language, $name_l10n) ? $name_l10n[$language] : $name_l10n['en'];
 
-OCP\App::addNavigationEntry(array(
-	'id' => 'dudle',
-	'order' => 6,
-	'href' => OCP\Util::linkToRoute('dudle_index'),
-	'icon' => OCP\Util::linkTo('dudle', 'appinfo/app.svg'),
-	'name' => $name
-));
+\OC::$server->getNavigationManager()->add(function () use ($name) {
+	$urlGenerator = \OC::$server->getURLGenerator();
+	return [
+		'id' => 'dudle',
+		'order' => 6,
+		'href' => $urlGenerator->linkToRoute('dudle_iframe'),
+		'icon' => $urlGenerator->linkTo('dudle', 'appinfo/app.svg'),
+		'name' => $name
+	];
+});

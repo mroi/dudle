@@ -1,2 +1,2 @@
 <?php
-$this->create('dudle_index', '/')->actionInclude('dudle/appinfo/index.php');
+$this->create('dudle_iframe', '/')->actionInclude('dudle/appinfo/iframe.php');
