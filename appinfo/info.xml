@@ -7,6 +7,6 @@
 	<description>This app integrates Dudle polls into Nextcloud. It provides polls on dates and topics.</description>
 	<version>0.1</version>
 	<dependencies>
-		<nextcloud min-version="9" max-version="11" />
+		<nextcloud min-version="12" max-version="12" />
 	</dependencies>
 </info>
