@@ -7,10 +7,11 @@ into [Nextcloud](https://Nextcloud.org). I also stripped it down considerably to
 required dependencies and simplify running it on shared hosting platforms. Many features 
 such as version control and customization are gone.
 
-You install the Dudle app within Nextcloud by cloning this repository into a new directory 
-`apps/dudle` within your Nextcloud installation. Make sure to rename the folder resulting 
-from the clone from `nextcloud-dudle` to just `dudle`. You can then enable the Dudle app in 
-the Nextcloud app selection dialog.
+You install the Dudle app within Nextcloud by cloning this repository into a new directory
+`apps/dudle` within your Nextcloud installation. Make sure to rename the folder resulting
+from the clone from `nextcloud-dudle` to just `dudle`. The `mod_cgi` Apache module and 
+`ruby` with `ruby-gettext` are required. You can then enable the Dudle app in the Nextcloud
+app selection dialog.
 
 Note that currently, access control is not available. Everyone accessing the Nextcloud app 
 has full permissions to create and delete polls.
