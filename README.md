@@ -1,3 +1,6 @@
+*This project is no longer actively maintained.*
+*I recommend checking out the official [Nextcloud Polls app](https://github.com/nextcloud/polls).*
+
 Dudle Polls for Nextcloud
 =========================
 
